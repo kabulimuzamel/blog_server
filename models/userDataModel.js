@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,7 +19,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'))
+    const token = jwt.sign({ _id: this._id }, process.env.myBlog_jwtPrivateKey)
     return token;
 }
 

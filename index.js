@@ -21,7 +21,8 @@ mongoose
 	.then((res) => startup('Connected to the Mongo Database...'))
 	.catch((err) => startup('Could not connect to the Mongo Database', err))
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:3000` }))
+// app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:3000` }))
+app.use(cors(process.env.CLIENT_ORIGIN))
 
 app.use('/api/login', loginRouter);
 app.use('/api/user', userRouter);

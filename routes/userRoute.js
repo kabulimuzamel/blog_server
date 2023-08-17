@@ -4,7 +4,6 @@ const userRouter = express.Router();
 const User = require('../models/userDataModel');
 const Post = require('../models/blogDataModel');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 
 // Create
 
@@ -42,7 +41,7 @@ userRouter.post('/', async (req, res) => {
 userRouter.get('/:token', async(req, res) => {
     const token = req.params.token;
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const user = await User.findOne({
             _id: decodedPayLoad._id,
         }).select('-__v -_id');
@@ -62,7 +61,7 @@ userRouter.get('/:token', async(req, res) => {
 userRouter.put('/:token', async(req, res) => {
     const token = req.params.token;
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const userId = decodedPayLoad._id;
         
         const { error } = validateUser(req);
@@ -91,7 +90,7 @@ userRouter.put('/:token', async(req, res) => {
 userRouter.delete('/:token', async (req, res) => {
     const token = req.params.token;
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const userId = decodedPayLoad._id;
         const posts = await Post.find({
             author: userId

@@ -4,7 +4,6 @@ const blogRouter = express.Router();
 const User = require('../models/userDataModel')
 const Post = require('../models/blogDataModel');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 
 // CRUD
 
@@ -13,7 +12,7 @@ const config = require('config');
 blogRouter.post('/:token', async (req, res) => {
     const token = req.params.token;
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const user = await User.findOne({
             _id: decodedPayLoad._id,
         }).select('-__v -password');
@@ -47,7 +46,7 @@ blogRouter.get('/:token', async (req, res) => {
     const token = req.params.token;
     
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const post = await Post.find({
             author: decodedPayLoad._id,
         }).select('-__v').populate('author', 'name userName')
@@ -66,7 +65,7 @@ blogRouter.put('/:token/:postId', async (req, res) => {
 	const inValidKey = []
 
 	try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const user = await User.findOne({
             _id: decodedPayLoad._id,
         }).select('-__v -_id -password');
@@ -109,7 +108,7 @@ blogRouter.put('/:token/:postId', async (req, res) => {
 blogRouter.delete('/:token/:postId', async  (req, res) => {
     const token = req.params.token;
     try {
-        const decodedPayLoad = jwt.verify(token, config.get('jwtPrivateKey'));
+        const decodedPayLoad = jwt.verify(token, process.env.myBlog_jwtPrivateKey);
         const user = await User.findOne({
             _id: decodedPayLoad._id,
         }).select('-__v -_id -password');
